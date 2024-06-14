@@ -3,7 +3,7 @@ The data and code for the paper 'How Chemists Determine Column Chromatography Co
 
 
 # Environments
-python==3.7.3
+python==3.7.3  
 rdkit==2020.09.1.0
 pandas==1.3.5
 numpy==1.21.6
