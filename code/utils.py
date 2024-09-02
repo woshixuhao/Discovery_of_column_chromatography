@@ -72,13 +72,13 @@ def read_data_CC():
     t1=df['t1'].values*50/(1000*60)
     t2=df['t2'].values*50/(1000*60)
     smiles=df['smiles'].values
-    rho=df['密度g/ml'].values
+    rho=df['density g/ml'].values
     V=df['V/ul'].values
     m=rho*V
-    V_e=df['上样溶剂量/ul'].values
-    e=df['上样溶剂'].values
+    V_e=df['loading volume/ul'].values
+    e=df['loading solvent'].values
     eluent=df['PE/EA'].values
-    speed=df['流速 ml/min'].values
+    speed=df['flow rate ml/min'].values
     eluent_ratio=convert_eluent_ratio(eluent)
     eluent=convert_eluent(eluent)
     e=convert_e(e)
@@ -91,16 +91,16 @@ def read_data_CC_8():
     df=df[df.t1!=-1]
     df=df[df.column_specs=='Silica-CS 4g+4g']
     df=df[np.isnan(df.t1)==False]
-    t1=df['t1'].values*50/(1000*60)
+   t1=df['t1'].values*50/(1000*60)
     t2=df['t2'].values*50/(1000*60)
     smiles=df['smiles'].values
-    rho=df['密度g/ml'].values
+    rho=df['density g/ml'].values
     V=df['V/ul'].values
     m=rho*V
-    V_e=df['上样溶剂量/ul'].values
-    e=df['上样溶剂'].values
+    V_e=df['loading volume/ul'].values
+    e=df['loading solvent'].values
     eluent=df['PE/EA'].values
-    speed=df['流速 ml/min'].values
+    speed=df['flow rate ml/min'].values
     eluent_ratio=convert_eluent_ratio(eluent)
     eluent=convert_eluent(eluent)
     e=convert_e(e)
@@ -113,16 +113,16 @@ def read_data_CC_25():
     df=df[df.t1!=-1]
     df=df[df.column_specs=='Silica-CS 25g']
     df=df[np.isnan(df.t1)==False]
-    t1=df['t1'].values*50/(1000*60)
+   t1=df['t1'].values*50/(1000*60)
     t2=df['t2'].values*50/(1000*60)
     smiles=df['smiles'].values
-    rho=df['密度g/ml'].values
+    rho=df['density g/ml'].values
     V=df['V/ul'].values
     m=rho*V
-    V_e=df['上样溶剂量/ul'].values
-    e=df['上样溶剂'].values
+    V_e=df['loading volume/ul'].values
+    e=df['loading solvent'].values
     eluent=df['PE/EA'].values
-    speed=df['流速 ml/min'].values
+    speed=df['flow rate ml/min'].values
     eluent_ratio=convert_eluent_ratio(eluent)
     eluent=convert_eluent(eluent)
     e=convert_e(e)
