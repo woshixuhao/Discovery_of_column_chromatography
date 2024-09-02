@@ -292,7 +292,7 @@ if mode=='Pre_Train_CC':
     except OSError:
         pass
 
-    with open(dir_name + '/' + 'data.txt', 'a+') as f:  # 设置文件对象
+    with open(dir_name + '/' + 'data.txt', 'a+') as f: 
         for epoch in tqdm(range(20000)):
             optimizer_CC.zero_grad()
             prediction_CC_1 = Net_CC(X_train_CC)[:,0].reshape(-1,1)
