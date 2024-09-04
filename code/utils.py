@@ -91,7 +91,7 @@ def read_data_CC_8():
     df=df[df.t1!=-1]
     df=df[df.column_specs=='Silica-CS 4g+4g']
     df=df[np.isnan(df.t1)==False]
-   t1=df['t1'].values*50/(1000*60)
+    t1=df['t1'].values*50/(1000*60)
     t2=df['t2'].values*50/(1000*60)
     smiles=df['smiles'].values
     rho=df['density g/ml'].values
@@ -113,7 +113,7 @@ def read_data_CC_25():
     df=df[df.t1!=-1]
     df=df[df.column_specs=='Silica-CS 25g']
     df=df[np.isnan(df.t1)==False]
-   t1=df['t1'].values*50/(1000*60)
+    t1=df['t1'].values*50/(1000*60)
     t2=df['t2'].values*50/(1000*60)
     smiles=df['smiles'].values
     rho=df['density g/ml'].values
