@@ -369,6 +369,9 @@ def save_Rf_t_per_eluent():
     '''
     generate meta-data and save coressponding V1(notation here is t1), V2(notation here is t2), and Rf
     '''
+    all_Rf=[]
+    all_t_1=[]
+    all_t_2=[]
     for i in tqdm(range(X_CC_unique.shape[0])):
         X_input=np.zeros([eluent_array.shape[0],X_CC_unique.shape[1]])
         for j in range(eluent_array.shape[0]):
