@@ -358,91 +358,10 @@ def save_Rf_t(X_CC,y_CC):
 
 
 
-def test_all_eq_adopt(X_CC,y_CC):
-    Rf = Net_TLC(
-        Variable(torch.from_numpy(X_CC[:, 0:189].astype(np.float32)).to(config.device), requires_grad=True))
-    X_CC = Variable(torch.from_numpy(X_CC.astype(np.float32)).to(config.device), requires_grad=True)
-    y_CC = Variable(torch.from_numpy(y_CC.astype(np.float32)).to(config.device))
-    df = pd.DataFrame({'Rf': Rf.cpu().data.numpy().reshape(-1, ),
-                       't1': y_CC[:, 0].cpu().data.numpy().reshape(-1, ),
-                       't2': y_CC[:, 1].cpu().data.numpy().reshape(-1, )})
-    X_CC_origin = np.load('dataset_save/X_CC_25.npy')
-    eluent_ratio = np.load('dataset_save/eluent_ratio_25.npy').reshape(-1, 1)
-    X_CC_origin = np.hstack((X_CC_origin, eluent_ratio))
-    # pred_t1 = 1.10*eluent_ratio / (0.0241 * Rf.cpu().data.numpy().reshape(-1, 1) + 0.0032)
-    # pred_t2 = 11.5*eluent_ratio / (0.1752 * Rf.cpu().data.numpy().reshape(-1, 1) + 0.01864)
-    pred_t1 = 5.11*eluent_ratio / (0.1117 * Rf.cpu().data.numpy().reshape(-1, 1) + 0.0139)
-    pred_t2 = 4.92*eluent_ratio / (0.0663* Rf.cpu().data.numpy().reshape(-1, 1) + 0.0077)
-    # pred_t1[pred_t1 == 0] = 16.40
-    # pred_t2[pred_t2 == 0] =25.77
-    pred_t1[pred_t1 == 0] = 15.70
-    pred_t2[pred_t2 == 0] =26.81
-    df_pred = pd.DataFrame({'pred_t1': pred_t1.reshape(-1, ), 'pred_t2': pred_t2.reshape(-1, )})
-    df_X = pd.DataFrame(X_CC_origin)
-    df = pd.concat([df_X, df, df_pred], axis=1)
-    split_array = np.arange(0,1.1,0.1)
-    all_dt=[]
-    for i in tqdm(range(pred_t1.shape[0])):
-        for index in range(split_array.shape[0]-1):
-            if split_array[index]<df['Rf'].values[i]<split_array[index+1]:
-                all_X=df.values
-
-                if index==0:
-                    model = DecisionTreeRegressor(criterion='mae', max_depth=9)
-                    model=joblib.load(f'model_save_tree/tree_{index}_9_both.pkl')
-                if index != 0:
-                    model = DecisionTreeRegressor(criterion='mae', max_depth=5)
-                    model = joblib.load(f'model_save_tree/tree_{index}_9_both.pkl')
-                dt=model.predict(all_X[i,0:183].reshape(1, -1))
-                pred_t1[i]*=dt
-                pred_t2[i] *= dt
-                #pred_t1[i]=pred_t1[i]*1.377+4.514
-                all_dt.append(dt)
-                #print('now:',pred_t1[i], df['t1'].values[i])
-    all_dt=np.array(all_dt)
-    df['pred_t1']=pred_t1
-    df['pred_t2'] = pred_t2
-    b = df['pred_t1'].values.reshape(-1,1)
-    a = df['t1'].values.reshape(-1,1)
-    b_2 = df['pred_t2'].values.reshape(-1, 1)
-    a_2 = df['t2'].values.reshape(-1, 1)
-
-    # delta=np.abs(a-b).tolist()
-    # re1 = list(map(delta.index, heapq.nlargest(10, delta)))
-    # a=np.delete(a,re1)
-    # b=np.delete(b,re1)
-    # delta=np.abs(a_2-b_2).tolist()
-    # re2 = list(map(delta.index, heapq.nlargest(10, delta)))
-    # a_2=np.delete(a_2,re2)
-    # b_2=np.delete(b_2,re2)
-
-    save_result=pd.DataFrame({'t1':a.reshape(-1,),'pred_t1':b.reshape(-1,),
-                              't2': a_2.reshape(-1, ), 'pred_t2': b_2.reshape(-1, ),
-                              'Rf':Rf.cpu().data.numpy().reshape(-1, 1).reshape(-1,),
-                              'eluent_ratio':eluent_ratio.reshape(-1,),
-                               'ratio':(pred_t1/all_dt).reshape(-1,),
-                              'epi':all_dt.reshape(-1,)})
-    save_result.to_csv(f"result_save/tree_adopt/result_25.csv")
-    print(a.shape, b.shape)
-    print(1 - (((a - b) ** 2).sum() / ((a - a.mean()) ** 2).sum()))
-    print(1 - (((a_2 - b_2) ** 2).sum() / ((a_2 - a_2.mean()) ** 2).sum()))
-
-    with open(f"result_save/tree_adopt/R_2_25.log", "w") as f:
-        f.write(f'R_2: {1 - (((a - b) ** 2).sum() / ((a - a.mean()) ** 2).sum())}')
-        f.write(f'R_2: {1 - (((a_2 - b_2) ** 2).sum() / ((a_2 - a_2.mean()) ** 2).sum())}')
-    plt.plot(np.arange(0,60,1),np.arange(0,60,1))
-    plt.scatter(a,b)
-    plt.show()
-    plt.plot(np.arange(0,120,1),np.arange(0,120,1))
-    plt.scatter(a_2,b_2)
-    plt.show()
-
-
 
 # before transfer
 test_all_eq_origin(X_CC,y_CC)
 # find transfer param
 find_transfer_param()
-#after transfer
-test_all_eq_adopt(X_CC,y_CC)
+
 
